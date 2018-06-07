@@ -1,0 +1,22 @@
+header.site-header {
+	margin: 0.5em;
+	width: 100%;
+
+	h1, h2, h3, h4, h5, h6 {
+		margin: 0.25em 0;
+	}
+
+	h1.site-title, h2.site-tagline {
+		margin: 0.5em auto;
+		text-align: center;
+	}
+
+	h1.site-title {
+		font-size: 2em;
+	}
+
+	h2.site-tagline {
+		font-size: 1em;
+		max-width: 20em;
+	}
+}

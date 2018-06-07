@@ -1,0 +1,31 @@
+@import "vars";
+
+@import "footer";
+@import "header";
+
+// the "everything" selector
+html, body,
+div, span, object, iframe,
+h1, h2, h3, h4, h5, h6,
+p, blockquote, pre, a, abbr, acronym, address, code, del, dfn, em, img, q, dl,
+dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody,
+tfoot, thead, tr, th, td, article, aside, dialog, figure, footer, header,
+button, input,
+hgroup, nav, section
+{
+	margin: 0;
+	padding: 0;
+	border: none;
+	font-family: $font_family_default;
+	font-weight: $font_weight_default;
+	box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: $font_family_heading;
+	font-weight: $font_weight_heading;
+}
+
+html, body {
+	font-weight: $font_weight_default;
+}
