@@ -66,17 +66,16 @@ export default Controller.extend({
         return;
       }
 
+      this.set('chat', '');
       const currentBeliefs = player.get('beliefs').toArray();
       let sentenceTopicId = sentenceTopic.topic.get('id');
       let agreement = sentenceTopic.positive === true ? 100 : 0;
       let foundBelief = currentBeliefs.find(belief => belief.get('topic.id') === sentenceTopicId);
       if (foundBelief !== undefined) {
-        this.set('chat', '');
         foundBelief.set('agreement', agreement);
         return;
       }
 
-      this.set('chat', '');
       let belief = store.createRecord('belief', {
         id: `${new Date().toString()}-${Math.random()}`,
         topic: sentenceTopic.topic,
