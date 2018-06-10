@@ -41,7 +41,7 @@ const certaintyPrefixes = [
   ["I think ", "I believe "],
   ["I am pretty sure "],
   ["I am certain "],
-  ["Obviously ", "I know for a fact that ", "Clearly "],
+  ["Obviously ", "I know for a fact ", "Clearly "],
 ];
 
 const certaintySuffixes = "........!";
