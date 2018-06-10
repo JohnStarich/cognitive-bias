@@ -18,8 +18,12 @@ export default DS.Model.extend({
       certainty = (50 - agreement) / 50.0;
       description = topic.get('negatedDescription');
     }
+    let certaintyIndex = Math.floor(certainty * (certaintyPrefixes.length - 1));
+    if (certaintyIndex === 0) {
+      description = topic.get('description');
+    }
 
-    let prefixOptions = certaintyPrefixes[Math.floor(certainty * (certaintyPrefixes.length - 1))];
+    let prefixOptions = certaintyPrefixes[certaintyIndex];
     let prefix = prefixOptions[this._randomInt(prefixOptions.length)];
     let suffix = certaintySuffixes[this._randomInt(certaintySuffixes.length)];
     return `${prefix}${description}${suffix}`;
@@ -31,7 +35,7 @@ export default DS.Model.extend({
 });
 
 const certaintyPrefixes = [
-  ["I don't know if "],
+  ["I don't know whether or not ", "I don't know if ", "I am not sure if "],
   ["Rumor has it that ", "I am told "],
   ["I have heard ", "I have read "],
   ["I think ", "I believe "],
