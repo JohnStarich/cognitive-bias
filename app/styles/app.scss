@@ -1,6 +1,7 @@
 @import "vars";
 
 @import "footer";
+@import "game";
 @import "header";
 
 // the "everything" selector
@@ -28,4 +29,14 @@ h1, h2, h3, h4, h5, h6 {
 
 html, body {
 	font-weight: $font_weight_default;
+}
+
+button, input {
+	appearance: none;
+	border: 1px solid #AAA;
+	width: 100%;
+	height: 100%;
+	padding: 0.5em;
+	font-size: 1em;
+	outline: none;
 }

@@ -1,0 +1,74 @@
+$cloud-border-color: #AAA;
+$cloud-background-color: #FFF;
+
+.person-list {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	margin: 1em;
+	justify-content: center;
+
+	.person {
+		min-width: 20em;
+	}
+}
+
+.person {
+	max-width: 50%;
+	appearance: none;
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	margin: 1em;
+
+	.person-identity {
+		order: 2;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: center;
+
+		.person-head {
+			margin: 0.25em;
+		}
+
+		&:before {
+			content: "";
+			border-left: 5px solid $cloud-border-color;
+			border-bottom-left-radius: 100%;
+			height: 1em;
+			width: 0.5em;
+			transform: translateY(calc(-50% - 2px));
+		}
+	}
+
+	.person-beliefs {
+		border: 1px solid $cloud-border-color;
+		background-color: #FFF;
+		border-radius: 0.5em;
+		padding: 0.5em;
+	}
+
+	.person-belief {
+		order: 1;
+		appearance: none;
+		list-style: none;
+		margin: 0.5em 0;
+	}
+}
+
+.player {
+	margin: 2em auto;
+
+	.player-chat {
+		border: none;
+		padding: 0;
+	}
+
+	.person-belief:last-child {
+		border-bottom: 1px solid $cloud-border-color;
+		padding-bottom: 0.5em;
+	}
+}

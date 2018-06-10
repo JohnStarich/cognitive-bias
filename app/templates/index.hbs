@@ -1,0 +1,31 @@
+<div class="person player">
+	<div class="person-identity">
+		{{person-head player.color}}
+		<div class="person-name">{{player.name}}</div>
+	</div>
+	<div class="person-beliefs">
+		<ul>
+		{{#each player.beliefs as |belief|}}
+			<li class="person-belief">{{belief.sentence}}</li>
+		{{/each}}
+		</ul>
+		{{input type="text" placeholder="Say something..." autofocus=true autocomplete="off" class="player-chat" enter=(action 'say') value=chat}}
+	</div>
+</div>
+
+<ul class="person-list">
+{{#each people as |person|}}
+	<li class="person">
+		<div class="person-identity">
+			{{person-head person.color}}
+			<div class="person-name">{{person.name}}</div>
+		</div>
+		<ul class="person-beliefs">
+		{{#each person.beliefs as |belief|}}
+			<li class="person-belief">{{belief.sentence}}</li>
+		{{/each}}
+		</ul>
+	</li>
+{{/each}}
+</ul>
+
