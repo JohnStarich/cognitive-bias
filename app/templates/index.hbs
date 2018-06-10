@@ -21,9 +21,13 @@
 			<div class="person-name">{{person.name}}</div>
 		</div>
 		<ul class="person-beliefs">
-		{{#each person.beliefs as |belief|}}
-			<li class="person-belief">{{belief.sentence}}</li>
-		{{/each}}
+		{{#if person.believesAnything}}
+			<li class="person-belief">{{if chat chat "..."}}</li>
+		{{else}}
+			{{#each person.beliefs as |belief|}}
+				<li class="person-belief">{{belief.sentence}}</li>
+			{{/each}}
+		{{/if}}
 		</ul>
 	</li>
 {{/each}}

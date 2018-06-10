@@ -6,7 +6,6 @@ export default DS.Model.extend({
   agreement: DS.attr(), // a percentage where 0 = disagree completely, 50 = no opinion, 100 = agree completely
 
   sentence: computed('topic', 'agreement', function() {
-    console.log("running sentence generator");
     let topic = this.get('topic');
     let agreement = this.get('agreement');
     let certainty;

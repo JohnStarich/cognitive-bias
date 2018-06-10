@@ -1,6 +1,8 @@
 import Controller from '@ember/controller';
 
 const otherPeopleCount = 3;
+const AgreementCoefficient = 1/10;
+const TrustCoefficient = 1/2;
 
 export default Controller.extend({
 
@@ -57,32 +59,65 @@ export default Controller.extend({
     return undefined;
   },
 
+  updatePlayerBeliefs(topic, positive) {
+    const store = this.get('store');
+    const player = this.get('player');
+    this.set('chat', '');
+    const currentBeliefs = player.get('beliefs').toArray();
+    const topicId = topic.get('id');
+    const agreement = positive === true ? 100 : 0;
+    let foundBelief = currentBeliefs.find(belief => belief.get('topic.id') === topicId);
+    if (foundBelief !== undefined) {
+      foundBelief.set('agreement', agreement);
+      return;
+    }
+
+    let belief = store.createRecord('belief', {
+      id: `${new Date().toString()}-${Math.random()}`,
+      topic: topic,
+      agreement: agreement,
+    });
+    currentBeliefs.push(belief);
+    player.set('beliefs', currentBeliefs);
+  },
+
+  updateOtherPeopleBeliefs(topic, positive) {
+    const playerAgreement = positive === true ? 100 : 0;
+    const topicId = topic.get('id');
+    this.get('people').forEach(person => {
+      const beliefs = person.get('beliefs');
+      let belief = beliefs.find(belief => belief.get('topic.id') === topicId);
+      if (belief === undefined) {
+        return;
+      }
+      const trust = person.get('trustLevel');
+      const personAgreement = belief.get('agreement');
+      let agreementSimilarity = (100 - Math.abs(playerAgreement - personAgreement)) / 100;
+      let agreementMultiplier = agreementSimilarity * AgreementCoefficient + trust / 100;
+      if (playerAgreement > personAgreement) {
+        agreementMultiplier = 1 + agreementMultiplier;
+      } else {
+        agreementMultiplier = 1 - agreementMultiplier;
+      }
+      let newAgreement = personAgreement * agreementMultiplier;
+      newAgreement = Math.min(100, Math.max(1, newAgreement));
+      belief.set('agreement', newAgreement);
+
+      let newTrust = trust + agreementSimilarity * TrustCoefficient;
+      newTrust = Math.min(100, Math.max(1, newTrust));
+      person.set('trustLevel', newTrust);
+    });
+  },
+
   actions: {
     say(sentence) {
-      const store = this.get('store');
-      const player = this.get('player');
       let sentenceTopic = this._topicForSentence(sentence);
       if (sentenceTopic === undefined) {
         return;
       }
-
-      this.set('chat', '');
-      const currentBeliefs = player.get('beliefs').toArray();
-      let sentenceTopicId = sentenceTopic.topic.get('id');
-      let agreement = sentenceTopic.positive === true ? 100 : 0;
-      let foundBelief = currentBeliefs.find(belief => belief.get('topic.id') === sentenceTopicId);
-      if (foundBelief !== undefined) {
-        foundBelief.set('agreement', agreement);
-        return;
-      }
-
-      let belief = store.createRecord('belief', {
-        id: `${new Date().toString()}-${Math.random()}`,
-        topic: sentenceTopic.topic,
-        agreement: agreement,
-      });
-      currentBeliefs.push(belief);
-      player.set('beliefs', currentBeliefs);
+      let {topic, positive} = sentenceTopic;
+      this.updatePlayerBeliefs(topic, positive);
+      this.updateOtherPeopleBeliefs(topic, positive);
     },
   },
  });
