@@ -9,6 +9,7 @@ const BeliefCount = 3;
 
 export default Controller.extend({
   statements: inject(),
+  flashMessages: inject(),
 
   init() {
     this._super(...arguments);
@@ -125,6 +126,7 @@ export default Controller.extend({
     say(sentence) {
       let sentenceTopic = this.get('statements').extractAgreement(sentence);
       if (sentenceTopic === undefined) {
+        this.get('flashMessages').danger("Unrecognized topic. Try re-wording it to match someone's beliefs.");
         return;
       }
       let {topic, agreement} = sentenceTopic;

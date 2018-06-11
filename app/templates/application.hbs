@@ -3,6 +3,14 @@
 	<h2 class="site-tagline">A game to explore cognitive biases we experience in our daily lives</h2>
 </header>
 
+<div class="alerts-container">
+	<div class="alerts">
+	{{#each flashMessages.queue as |flash|}}
+		{{flash-message flash=flash}}
+	{{/each}}
+	</div>
+</div>
+
 {{outlet}}
 
 <footer class="site-footer">

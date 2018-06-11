@@ -1,0 +1,66 @@
+.alerts-container {
+	position: relative;
+	z-index: 1000;
+
+	.alerts {
+		position: absolute;
+		overflow: hidden;
+		top: 0;
+		right: 0;
+		max-width: 50%;
+
+		header.hidden + & {
+			position: fixed;
+		}
+
+		.alert {
+			position: relative;
+			margin: 0.5em;
+			padding: 0.5em 0.65em;
+			border-radius: 0.5em;
+			opacity: 0;
+			right: -2em;
+			font-size: 0.9em;
+
+			transition: all 700ms cubic-bezier(0.68, -0.2, 0.265, 1.55);
+
+			&.active {
+				right: 0;
+				opacity: 1;
+
+				&.exiting {
+					right: -100%;
+					opacity: 0;
+					transition-duration: 2s;
+				}
+			}
+
+			$full-color: #EEE;
+			@mixin full-color {
+				background-color: transparentize($full-color, 0.1);
+				border: 1px solid darken($full-color, 20%);
+			}
+			@include full-color;
+
+			&.alert-success {
+				$full-color: #CFC;
+				@include full-color;
+			}
+
+			&.alert-warning {
+				$full-color: #FD6;
+				@include full-color;
+			}
+
+			&.alert-info {
+				$full-color: #EEE;
+				@include full-color;
+			}
+
+			&.alert-danger {
+				$full-color: #FAA;
+				@include full-color;
+			}
+		}
+	}
+}
