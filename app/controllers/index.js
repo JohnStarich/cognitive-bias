@@ -23,13 +23,7 @@ export default Controller.extend({
       return store.createRecord('topic', Object.assign({id: index}, topic));
     });
     let makeBeliefs = (personId) => {
-      let chosenTopics = [];
-      while (chosenTopics.length < BeliefCount || topics.length < BeliefCount) {
-        let element = this._randomElement(topics);
-        if (! chosenTopics.includes(element)) {
-          chosenTopics.push(element);
-        }
-      }
+      let chosenTopics = this._chooseRandomElements(topics, BeliefCount);
       return chosenTopics.map((topic, topicId) => {
         return store.createRecord('belief', {
           id: `person-${personId}-belief-${topicId}`,
@@ -38,14 +32,16 @@ export default Controller.extend({
         });
       });
     };
+    let chosenNames = this._chooseRandomElements(names, otherPeopleCount);
+    let chosenColors = this._chooseRandomElements(colors, otherPeopleCount);
     let otherPeople = this._generateRange(otherPeopleCount)
       .map(personIndex => {
         return store.createRecord('person', {
           id: `person-${personIndex + 1}`,
-          name: `Person ${personIndex}`,
+          name: chosenNames[personIndex],
           beliefs: makeBeliefs(personIndex),
           trustLevel: 0,
-          color: colors[personIndex],
+          color: chosenColors[personIndex],
         });
       });
     this.set('player', player);
@@ -58,6 +54,17 @@ export default Controller.extend({
 
   _randomElement(array) {
     return array[Math.round(Math.random() * (array.length - 1))];
+  },
+
+  _chooseRandomElements(array, n) {
+    let chosenElements = [];
+    while(chosenElements.length < n || array.length < n) {
+      let element = this._randomElement(array);
+      if (! chosenElements.includes(element)) {
+        chosenElements.push(element);
+      }
+    }
+    return chosenElements;
   },
 
   updatePlayerBeliefs(sentence, topic, agreement) {
@@ -179,6 +186,17 @@ const colors = [
   "red",
   "blue",
   "green",
-  "magenta",
-  "cyan",
+  "purple",
+  "orange",
+  "teal",
+];
+
+const names = [
+  "Alice",
+  "Bob",
+  "Candice",
+  "Daniel",
+  "Elise",
+  "Fred",
+  "Gloria",
 ];
