@@ -11,6 +11,12 @@ export default Controller.extend({
   statements: inject(),
   flashMessages: inject(),
 
+  win: false,
+
+  notWin: computed('win', function() {
+    return this.get('win') !== false;
+  }),
+
   init() {
     this._super(...arguments);
 
@@ -115,6 +121,10 @@ export default Controller.extend({
       newTrust = Math.min(100, Math.max(1, newTrust));
       person.set('trustLevel', newTrust);
     });
+
+    if (this.get('averageTrust') == 100) {
+      this.set('win', true);
+    }
   },
 
   averageTrust: computed('people.@each.trustLevel', function() {
