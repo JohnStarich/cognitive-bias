@@ -1,10 +1,14 @@
 import Controller from '@ember/controller';
+import { computed } from '@ember/object';
+import { inject } from '@ember/service';
 
 const otherPeopleCount = 3;
-const AgreementCoefficient = 1/10;
-const TrustCoefficient = 1/2;
+const AgreementCoefficient = 1/5;
+const TrustCoefficient = 10;
+const BeliefCount = 3;
 
 export default Controller.extend({
+  statements: inject(),
 
   init() {
     this._super(...arguments);
@@ -18,7 +22,14 @@ export default Controller.extend({
       return store.createRecord('topic', Object.assign({id: index}, topic));
     });
     let makeBeliefs = (personId) => {
-      return topics.map((topic, topicId) => {
+      let chosenTopics = [];
+      while (chosenTopics.length < BeliefCount || topics.length < BeliefCount) {
+        let element = this._randomElement(topics);
+        if (! chosenTopics.includes(element)) {
+          chosenTopics.push(element);
+        }
+      }
+      return chosenTopics.map((topic, topicId) => {
         return store.createRecord('belief', {
           id: `person-${personId}-belief-${topicId}`,
           topic: topic,
@@ -44,31 +55,20 @@ export default Controller.extend({
     return Array.from({length: n}, (value, key) => key);
   },
 
-  _topicForSentence(sentence) {
-    const store = this.get('store');
-    const allTopics = store.peekAll('topic');
-    const lowerSentence = sentence.toLowerCase();
-    let positiveMatch = allTopics.find(topic => lowerSentence.includes(topic.get('description')));
-    if (positiveMatch !== undefined) {
-      return {positive: true, topic: positiveMatch};
-    }
-    let negativeMatch = allTopics.find(topic => lowerSentence.includes(topic.get('negatedDescription')));
-    if (negativeMatch !== undefined) {
-      return {positive: false, topic: negativeMatch};
-    }
-    return undefined;
+  _randomElement(array) {
+    return array[Math.round(Math.random() * (array.length - 1))];
   },
 
-  updatePlayerBeliefs(topic, positive) {
+  updatePlayerBeliefs(sentence, topic, agreement) {
     const store = this.get('store');
     const player = this.get('player');
     this.set('chat', '');
     const currentBeliefs = player.get('beliefs').toArray();
     const topicId = topic.get('id');
-    const agreement = positive === true ? 100 : 0;
     let foundBelief = currentBeliefs.find(belief => belief.get('topic.id') === topicId);
     if (foundBelief !== undefined) {
       foundBelief.set('agreement', agreement);
+      foundBelief.set('sentence', sentence);
       return;
     }
 
@@ -76,13 +76,13 @@ export default Controller.extend({
       id: `${new Date().toString()}-${Math.random()}`,
       topic: topic,
       agreement: agreement,
+      sentence: sentence,
     });
     currentBeliefs.push(belief);
     player.set('beliefs', currentBeliefs);
   },
 
-  updateOtherPeopleBeliefs(topic, positive) {
-    const playerAgreement = positive === true ? 100 : 0;
+  updateOtherPeopleBeliefs(topic, playerAgreement) {
     const topicId = topic.get('id');
     this.get('people').forEach(person => {
       const beliefs = person.get('beliefs');
@@ -94,7 +94,7 @@ export default Controller.extend({
       const personAgreement = belief.get('agreement');
       let agreementSimilarity = (100 - Math.abs(playerAgreement - personAgreement)) / 100;
       let agreementMultiplier = agreementSimilarity * AgreementCoefficient + trust / 100;
-      if (playerAgreement > personAgreement) {
+      if (playerAgreement > 50) {
         agreementMultiplier = 1 + agreementMultiplier;
       } else {
         agreementMultiplier = 1 - agreementMultiplier;
@@ -109,18 +109,30 @@ export default Controller.extend({
     });
   },
 
+  averageTrust: computed('people.@each.trustLevel', function() {
+    const mean = this.get('people')
+      .reduce((movingAvg, person) => {
+        let trustLevel = person.get('trustLevel');
+        movingAvg.mean = (movingAvg.mean * movingAvg.count + trustLevel) / (movingAvg.count + 1);
+        movingAvg.count += 1;
+        return movingAvg;
+      }, {count: 0, mean: 0})
+      .mean;
+    return Math.round(mean);
+  }),
+
   actions: {
     say(sentence) {
-      let sentenceTopic = this._topicForSentence(sentence);
+      let sentenceTopic = this.get('statements').extractAgreement(sentence);
       if (sentenceTopic === undefined) {
         return;
       }
-      let {topic, positive} = sentenceTopic;
-      this.updatePlayerBeliefs(topic, positive);
-      this.updateOtherPeopleBeliefs(topic, positive);
+      let {topic, agreement} = sentenceTopic;
+      this.updatePlayerBeliefs(sentence, topic, agreement);
+      this.updateOtherPeopleBeliefs(topic, agreement);
     },
   },
- });
+});
 
 const defaultTopics = [
   {
@@ -130,6 +142,34 @@ const defaultTopics = [
   {
     description: "sleep is optional",
     negatedDescription: "sleep is not optional",
+  },
+  {
+    description: "we need fewer guns",
+    negatedDescription: "we need more guns",
+  },
+  {
+    description: "war is good",
+    negatedDescription: "war is wrong",
+  },
+  {
+    description: "ignorance is strength",
+    negatedDescription: "ignorance is weakness",
+  },
+  {
+    description: "universal health care is harmful",
+    negatedDescription: "universal health care is good",
+  },
+  {
+    description: "weed should be legal",
+    negatedDescription: "weed should be illegal",
+  },
+  {
+    description: "obedience is best",
+    negatedDescription: "independence is important",
+  },
+  {
+    description: "selfishness is useful",
+    negatedDescription: "selfishness is harmful",
   },
 ];
 

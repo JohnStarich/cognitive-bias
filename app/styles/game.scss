@@ -9,7 +9,7 @@ $cloud-background-color: #FFF;
 	justify-content: center;
 
 	.person {
-		min-width: 20em;
+		width: 40%;
 	}
 }
 
@@ -23,7 +23,7 @@ $cloud-background-color: #FFF;
 	margin: 1em;
 
 	.person-identity {
-		order: 2;
+		order: -1;
 		display: flex;
 		flex-direction: row;
 		flex-wrap: nowrap;
@@ -45,6 +45,7 @@ $cloud-background-color: #FFF;
 	}
 
 	.person-beliefs {
+		order: -2;
 		border: 1px solid $cloud-border-color;
 		background-color: #FFF;
 		border-radius: 0.5em;
@@ -52,7 +53,6 @@ $cloud-background-color: #FFF;
 	}
 
 	.person-belief {
-		order: 1;
 		appearance: none;
 		list-style: none;
 		margin: 0.5em 0;
@@ -70,5 +70,10 @@ $cloud-background-color: #FFF;
 	.person-belief:last-child {
 		border-bottom: 1px solid $cloud-border-color;
 		padding-bottom: 0.5em;
+	}
+
+	.trust {
+		text-align: center;
+		margin: 1em;
 	}
 }
