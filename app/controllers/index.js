@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
+import utils from '../utils';
 
 const otherPeopleCount = 3;
 const AgreementCoefficient = 1/5;
@@ -29,7 +30,7 @@ export default Controller.extend({
       return store.createRecord('topic', Object.assign({id: index}, topic));
     });
     let makeBeliefs = (personId) => {
-      let chosenTopics = this._chooseRandomElements(topics, BeliefCount);
+      let chosenTopics = utils.chooseRandomElements(topics, BeliefCount);
       return chosenTopics.map((topic, topicId) => {
         return store.createRecord('belief', {
           id: `person-${personId}-belief-${topicId}`,
@@ -38,9 +39,9 @@ export default Controller.extend({
         });
       });
     };
-    let chosenNames = this._chooseRandomElements(names, otherPeopleCount);
-    let chosenColors = this._chooseRandomElements(colors, otherPeopleCount);
-    let otherPeople = this._generateRange(otherPeopleCount)
+    let chosenNames = utils.chooseRandomElements(names, otherPeopleCount);
+    let chosenColors = utils.chooseRandomElements(colors, otherPeopleCount);
+    let otherPeople = utils.generateRange(otherPeopleCount)
       .map(personIndex => {
         return store.createRecord('person', {
           id: `person-${personIndex + 1}`,
@@ -52,25 +53,6 @@ export default Controller.extend({
       });
     this.set('player', player);
     this.set('people', otherPeople);
-  },
-
-  _generateRange(n) {
-    return Array.from({length: n}, (value, key) => key);
-  },
-
-  _randomElement(array) {
-    return array[Math.round(Math.random() * (array.length - 1))];
-  },
-
-  _chooseRandomElements(array, n) {
-    let chosenElements = [];
-    while(chosenElements.length < n || array.length < n) {
-      let element = this._randomElement(array);
-      if (! chosenElements.includes(element)) {
-        chosenElements.push(element);
-      }
-    }
-    return chosenElements;
   },
 
   updatePlayerBeliefs(sentence, topic, agreement) {
@@ -159,40 +141,44 @@ export default Controller.extend({
 
 const defaultTopics = [
   {
-    description: "tomatoes are vegetables",
-    negatedDescription: "tomatoes are not vegetables",
+    description: ["tomatoes are vegetables", "tomatoes are fruits"],
+    negatedDescription: ["tomatoes are not vegetables", "tomatoes are not fruits"],
   },
   {
-    description: "sleep is optional",
-    negatedDescription: "sleep is not optional",
+    description: ["sleep is optional", "sleep is not important", "sleep is bad"],
+    negatedDescription: ["sleep is not optional", "sleep is important", "sleep is good"],
   },
   {
-    description: "we need fewer guns",
-    negatedDescription: "we need more guns",
+    description: ["we need fewer guns", "guns are bad"],
+    negatedDescription: ["we need more guns", "guns are good"],
   },
   {
-    description: "war is good",
-    negatedDescription: "war is wrong",
+    description: ["war is good", "war is peace"],
+    negatedDescription: ["war is wrong", "war is bad"],
   },
   {
-    description: "ignorance is strength",
-    negatedDescription: "ignorance is weakness",
+    description: ["ignorance is strength", "ignorance is good"],
+    negatedDescription: ["ignorance is weakness", "ignorance is bad"],
   },
   {
-    description: "universal health care is harmful",
-    negatedDescription: "universal health care is good",
+    description: ["universal healthcare is harmful", "universal healthcare is bad"],
+    negatedDescription: ["universal healthcare is good", "universal healthcare is helpful"],
   },
   {
-    description: "weed should be legal",
-    negatedDescription: "weed should be illegal",
+    description: ["weed should be legal", "weed should not be illegal"],
+    negatedDescription: ["weed should be illegal", "weed should not be legal"],
   },
   {
-    description: "obedience is best",
-    negatedDescription: "independence is important",
+    description: ["obedience is best", "obedience is important", "independence is bad"],
+    negatedDescription: ["independence is important", "independence is good", "obedience is bad"],
   },
   {
-    description: "selfishness is useful",
-    negatedDescription: "selfishness is harmful",
+    description: ["selfishness is useful", "selfishness is good"],
+    negatedDescription: ["selfishness is harmful", "selfishness is bad"],
+  },
+  {
+    description: ["freedom is good", "slavery is bad"],
+    negatedDescription: ["freedom is slavery", "freedom is bad", "slavery is good"],
   },
 ];
 

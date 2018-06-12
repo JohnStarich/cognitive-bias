@@ -1,4 +1,5 @@
 import Service from '@ember/service';
+import utils from '../utils';
 import { inject } from '@ember/service';
 
 export default Service.extend({
@@ -9,24 +10,20 @@ export default Service.extend({
     let description;
     if (agreement > 50) {
       certainty = (agreement - 50) / 50.0;
-      description = topic.get('description');
+      description = utils.randomElement(topic.get('description'));
     } else {
       certainty = (50 - agreement) / 50.0;
-      description = topic.get('negatedDescription');
+      description = utils.randomElement(topic.get('negatedDescription'));
     }
     let certaintyIndex = Math.floor(certainty * (certaintyPrefixes.length - 1));
     if (certaintyIndex === 0) {
-      description = topic.get('description');
+      description = utils.randomElement(topic.get('description'));
     }
 
     let prefixOptions = certaintyPrefixes[certaintyIndex];
-    let prefix = prefixOptions[this._randomInt(prefixOptions.length)];
-    let suffix = certaintySuffixes[this._randomInt(certaintySuffixes.length)];
+    let prefix = prefixOptions[utils.randomInt(prefixOptions.length)];
+    let suffix = certaintySuffixes[utils.randomInt(certaintySuffixes.length)];
     return `${prefix}${description}${suffix}`;
-  },
-
-  _randomInt(max) {
-    return Math.round(Math.random() * (max - 1));
   },
 
   extractAgreement(sentence) {
@@ -40,12 +37,18 @@ export default Service.extend({
     }
     const certainty = prefixIndex / certaintyPrefixes.length;
     const allTopics = store.peekAll('topic').toArray();
-    let positiveMatch = allTopics.find(topic => lowerSentence.includes(topic.get('description')));
+    let positiveMatch =
+      allTopics.find(topic =>
+        topic.get('description').find(desc =>
+          lowerSentence.includes(desc)));
     if (positiveMatch !== undefined) {
       const agreement = 50 + certainty * 50;
       return {agreement: agreement, topic: positiveMatch};
     }
-    let negativeMatch = allTopics.find(topic => lowerSentence.includes(topic.get('negatedDescription')));
+    let negativeMatch =
+      allTopics.find(topic =>
+        topic.get('negatedDescription').find(desc =>
+          lowerSentence.includes(desc)));
     if (negativeMatch !== undefined) {
       const agreement = 50 - certainty * 50;
       return {agreement: agreement, topic: negativeMatch};
