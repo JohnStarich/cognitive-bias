@@ -24,3 +24,9 @@ before_install:
 script:
   - npm run lint:js
   - npm test
+
+deploy:
+  provider: script
+  script: npm run deploy
+  on:
+    branch: master
