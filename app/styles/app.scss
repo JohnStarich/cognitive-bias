@@ -41,3 +41,23 @@ button, input {
 	font-size: 1em;
 	outline: none;
 }
+
+a.source {
+	display: inline-block;
+	font-size: 50%;
+	transform: translateY(-20%);
+	padding: 0.1em;
+	font-weight: 600;
+	text-decoration: none;
+
+	&:before {
+		content: "[";
+	}
+	&:after {
+		content: "]";
+	}
+}
+
+em {
+	font-weight: 400;
+}

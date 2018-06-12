@@ -1,3 +1,14 @@
+<div class={{if win "win-status win" "win-status"}}>
+	{{#if win}}
+		<div class="win-description">
+			<h2>Congratulations, you won!</h2>
+			<p>In this game, you may have noticed how easy it is for people to change their minds and agree with you &mdash; even if you only state your beliefs. </p>
+			<p><em>If a statement feels familiar or is repeated often enough, you are more likely to believe it is true.</em></p>
+			<p>This is a form of cognitive bias called &ldquo;the illusory truth effect.&rdquo; You can read more about the effect through its research<a class="source" target="_blank" href="https://doi.org/10.5964%2Fejop.v8i2.456">1</a><a class="source" target="_blank" href="https://doi.org/10.1037%2Fa0021323">2</a> or on <a target="_blank" href="https://en.wikipedia.org/wiki/Illusory_truth_effect">Wikipedia</a>. Thanks for playing!</p>
+		</div>
+	{{/if}}
+</div>
+
 <div class="person player">
 	<div class="person-identity">
 		{{person-head player.color}}
@@ -9,7 +20,7 @@
 			<li class="person-belief">{{belief.sentence}}</li>
 		{{/each}}
 		</ul>
-		{{input type="text" placeholder="Say something..." autofocus=true autocomplete="off" class="player-chat" enter=(action 'say') value=chat}}
+		{{input type="text" placeholder="Say something..." autofocus=true autocomplete="off" class="player-chat" enter=(action 'say') value=chat disabled=notWin}}
 	</div>
 	<div class="trust">Average trust: {{averageTrust}}%</div>
 </div>

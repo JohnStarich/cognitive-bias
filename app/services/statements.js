@@ -50,7 +50,6 @@ export default Service.extend({
       const agreement = 50 - certainty * 50;
       return {agreement: agreement, topic: negativeMatch};
     }
-    // TODO notify them that this was an unrecognized topic
     return undefined;
   },
 });
