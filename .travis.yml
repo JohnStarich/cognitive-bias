@@ -25,9 +25,14 @@ script:
   - npm run lint:js
   - npm test
 
+before_deploy:
+  - npm run build
+
 deploy:
-  provider: script
+  provider: pages
   skip-cleanup: true
-  script: npm run deploy
+  keep-history: true
+  local-dir: dist
+  github_token: $GITHUB_TOKEN
   on:
     branch: master
