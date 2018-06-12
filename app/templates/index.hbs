@@ -20,7 +20,7 @@
 			<li class="person-belief">{{belief.sentence}}</li>
 		{{/each}}
 		</ul>
-		{{input type="text" placeholder="Say something..." autofocus=true autocomplete="off" class="player-chat" enter=(action 'say') value=chat disabled=notWin}}
+		{{input type="text" placeholder="Say something..." autofocus=true autocomplete="off" class="player-chat" enter=(action 'say') value=chat disabled=notWin paste=(action 'paste')}}
 	</div>
 	<div class="trust">Average trust: {{averageTrust}}%</div>
 </div>

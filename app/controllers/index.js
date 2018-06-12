@@ -150,6 +150,10 @@ export default Controller.extend({
       this.updatePlayerBeliefs(sentence, topic, agreement);
       this.updateOtherPeopleBeliefs(topic, agreement);
     },
+
+    paste() {
+      return false;
+    },
   },
 });
 
