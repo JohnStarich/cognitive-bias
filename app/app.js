@@ -8,6 +8,7 @@ const App = Application.extend({
   podModulePrefix: config.podModulePrefix,
   Resolver,
 
+  // eslint-disable-next-line ember/avoid-leaking-state-in-ember-objects
   customEvents: {
     paste: 'paste',
   },
