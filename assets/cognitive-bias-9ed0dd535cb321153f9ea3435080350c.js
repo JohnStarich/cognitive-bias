@@ -49,4 +49,4 @@ var n=[["I don't know whether or not ","I don't know if ","I am not sure if ","I
 var t={generateRange:function(e){return Array.from({length:e},function(e,t){return t})},randomInt:function(e){return Math.floor(Math.random()*e)},randomElement:function(e){return e[t.randomInt(e.length)]},chooseRandomElements:function(e,n){for(var i=new Set,a=[];a.length<n||e.length<n;){var s=t.randomInt(e.length)
 i.has(s)||(i.add(s),a.push(e[s]))}return a}}
 e.default=t}),define("cognitive-bias/config/environment",[],function(){try{var e="cognitive-bias/config/environment",t=document.querySelector('meta[name="'+e+'"]').getAttribute("content"),n={default:JSON.parse(unescape(t))}
-return Object.defineProperty(n,"__esModule",{value:!0}),n}catch(t){throw new Error('Could not read config from meta tag with name "'+e+'".')}}),runningTests||require("cognitive-bias/app").default.create({name:"cognitive-bias",version:"0.0.0+f73c3e5e"})
+return Object.defineProperty(n,"__esModule",{value:!0}),n}catch(t){throw new Error('Could not read config from meta tag with name "'+e+'".')}}),runningTests||require("cognitive-bias/app").default.create({name:"cognitive-bias",version:"0.0.0+eacf279d"})
