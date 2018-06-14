@@ -40,7 +40,7 @@ export default Service.extend({
     let positiveMatch =
       allTopics.find(topic =>
         topic.get('description').find(desc =>
-          lowerSentence.includes(desc)));
+          lowerSentence.includes(desc.toLowerCase())));
     if (positiveMatch !== undefined) {
       const agreement = 50 + certainty * 50;
       return {agreement: agreement, topic: positiveMatch};
@@ -48,7 +48,7 @@ export default Service.extend({
     let negativeMatch =
       allTopics.find(topic =>
         topic.get('negatedDescription').find(desc =>
-          lowerSentence.includes(desc)));
+          lowerSentence.includes(desc.toLowerCase())));
     if (negativeMatch !== undefined) {
       const agreement = 50 - certainty * 50;
       return {agreement: agreement, topic: negativeMatch};
