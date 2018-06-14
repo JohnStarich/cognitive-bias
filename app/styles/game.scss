@@ -117,3 +117,46 @@ $cloud-background-color: #FFF;
 		}
 	}
 }
+
+.instructions {
+	margin: 4em auto;
+	text-align: left;
+	max-width: 40%;
+	letter-spacing: 0.05em;
+	line-height: 1.5em;
+
+	> * {
+		margin: 0.5em;
+	}
+
+	.play-button {
+		display: block;
+		appearance: none;
+		text-decoration: none;
+		padding: 0.25em 0.5em;
+		margin: 0.5em auto;
+		margin-top: 2em;
+		border: 1px solid;
+		border-radius: 0.5em;
+		text-align: center;
+		max-width: 4em;
+
+		$play-color: #44F;
+		color: $play-color;
+		background-color: #FFF;
+		border-color: $play-color;
+		transition: color 0.25s, background-color 0.25s, border-color 0.25s;
+
+		&:active {
+			color: lighten($play-color, 30%);
+			background-color: $play-color;
+			border-color: darken($play-color, 30%);
+		}
+
+		&:hover {
+			color: $play-color;
+			background-color: transparentize($play-color, 0.9);
+			border-color: lighten($play-color, 10%);
+		}
+	}
+}
