@@ -141,6 +141,10 @@ export default Controller.extend({
 
 const defaultTopics = [
   {
+    description: ["NASCAR is great", "We need more NASCAR"],
+    negatedDescription: ["NASCAR is alright", "We need the same amount of NASCAR"],
+  },
+  {
     description: ["tomatoes are vegetables", "tomatoes are fruits"],
     negatedDescription: ["tomatoes are not vegetables", "tomatoes are not fruits"],
   },
